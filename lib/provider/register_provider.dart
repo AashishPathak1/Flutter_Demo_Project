@@ -9,12 +9,12 @@ class RegisterProvider extends ChangeNotifier {
   TextEditingController address = TextEditingController();
 
   RegisterProvider();
-  void changeName({String? newName}) {
-    if (newName != null) {
-      name.text = newName;
-      notifyListeners();
-    }
-  }
+  // void changeName({String? newName}) {
+  //   if (newName != null) {
+  //     name.text = newName;
+  //     notifyListeners();
+  //   }
+  // }
 
   // Dispose of controllers to free memory
   @override
