@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 // import 'login_screen.dart';
 import 'package:http/http.dart' as http;
@@ -14,45 +16,44 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
-  // Future<void> postData() async {
-  //   const api_URL = "";
-  //   var response = await http.post(Uri.parse(api_URL), headers: {}, body: {});
-  // }
-
   Future<void> createPost(String title, String body) async {
     final response = await http.post(
-      Uri.parse('https://jsonplaceholder.typicode.com/posts'),
+      Uri.parse('https://api.freeapi.app/api/v1/users/register'),
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
+        'Content-Type': 'application/json',
       },
       body: jsonEncode(<String, String>{
-        'title': title,
-        'body': body,
-        'userId': '1',
+        "email": "user.email233366@domain.com",
+        "password": "test33@123",
+        "role": "ADMIN",
+        "username": "doejohn4454666"
       }),
     );
+
+    log(response.body.toString());
 
     if (response.statusCode == 201) {
       // If the server returns a 201 CREATED response, then the post was successfully created.
       final responseBody = jsonDecode(response.body);
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Post Created"),
-            content: Text("New post ID: ${responseBody['id']}"),
-            actions: [
-              ElevatedButton(
-                child: Text("OK"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    } else {
+      log(responseBody);
+      // showDialog(
+      //   context: context,
+      //   builder: (BuildContext context) {
+      //     return AlertDialog(
+      //       title: Text("Post Created"),
+      //       content: Text("The Name of the Client is: ${responseBody['name']}"),
+      //       actions: [
+      //         ElevatedButton(
+      //           child: Text("OK"),
+      //           onPressed: () {
+      //             Navigator.of(context).pop();
+      //           },
+      //         ),
+      //       ],
+      //     );
+    }
+    // );
+    else {
       // If the server did not return a 201 CREATED response,
       // then throw an exception.
       throw Exception('Failed to create post');
@@ -113,7 +114,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     SizedBox(height: 5),
                     TextFormField(
-                      controller: RegisterProvider().email,
+                      controller: context.watch<RegisterProvider>().email,
                       decoration: const InputDecoration(
                         prefixIcon: Icon(
                           Icons.email,
@@ -133,6 +134,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     SizedBox(height: 5),
                     TextFormField(
+                      controller: context.watch<RegisterProvider>().phoneNumber,
                       decoration: const InputDecoration(
                         prefixIcon: Icon(
                           Icons.phone,
@@ -152,7 +154,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     SizedBox(height: 5),
                     TextFormField(
-                      controller: RegisterProvider().address,
+                      // controller: RegisterProvider().address,
+                      controller: context.watch<RegisterProvider>().address,
+
                       decoration: const InputDecoration(
                         prefixIcon: Icon(
                           Icons.location_city,
@@ -170,7 +174,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     SizedBox(height: 5),
                     TextFormField(
-                      controller: RegisterProvider().password,
+                      // controller: RegisterProvider().password,
+                      controller: context.watch<RegisterProvider>().password,
                       obscureText: true,
                       decoration: const InputDecoration(
                         prefixIcon: Icon(
@@ -192,7 +197,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     SizedBox(height: 5),
                     TextFormField(
-                      controller: RegisterProvider().confirmPassword,
+                      // controller: RegisterProvider().confirmPassword,
+                      controller:
+                          context.watch<RegisterProvider>().confirmPassword,
+
                       obscureText: true,
                       decoration: const InputDecoration(
                         prefixIcon: Icon(
@@ -212,13 +220,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     SizedBox(height: 5),
 
-                    // * this elevated button use to call the api and showing the message:
-                    // ElevatedButton(
-                    //   onPressed: () =>
-                    //       createPost('Flutter', 'Posting to API from Flutter'),
-                    //   child: const Text('Create Post'),
-                    // ),
-
                     // * this elevated button use to check the validated form submission:
                     ElevatedButton(
                       onPressed: () {
@@ -227,6 +228,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             const SnackBar(
                                 content: Text('Sign-up successful!')),
                           );
+                          createPost('Flutter', 'Posting to API from Flutter');
                           // Additional submission logic here
                         }
                       },
